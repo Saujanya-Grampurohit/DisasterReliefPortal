@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Volunteers List</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>🤝 Registered Volunteers</h1>
+    <p><strong>Total Funds Collected:</strong> ₹{{ total }}</p>
+
+    <canvas id="aidChart" width="400" height="200"></canvas>
+
+    <h2>Volunteers by City</h2>
+    {% for city, vols in cities.items() %}
+      <div class="card">
+        <h3>📍 {{ city }}</h3>
+        <ul>
+          {% for v in vols %}
+            <li>👤 {{ v.name }} - {{ v.aidType.capitalize() }} {% if v.amount > 0 %} (₹{{ v.amount }}){% endif %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+
+    <a href="/"><button>🏠 Back to Home</button></a>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('aidChart');
+    const data = JSON.parse('{{ chart|safe }}');
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: Object.keys(data),
+        datasets: [{
+          label: 'Aid Types',
+          data: Object.values(data),
+          backgroundColor: ['#00c6ff', '#ff6b6b', '#ffd93d'],
+        }]
+      }
+    });
+  </script>
+</body>
+</html>

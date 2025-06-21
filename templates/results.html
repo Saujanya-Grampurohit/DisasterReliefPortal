@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rescue Tracker</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>✅ Disaster Response Summary</h1>
+
+    <div class="card">
+      <h3>🧭 Affected Area</h3>
+      <p>{{ area.title() }}</p>
+
+      <h3>{{ area_type }}</h3>
+      <ul>
+        {% for place in selected_areas %}
+          <li>{{ place }}</li>
+        {% endfor %}
+      </ul>
+
+      <h3>🏠 Shelters</h3>
+      <ul>
+        {% for shelter in info.shelters %}
+          <li>{{ shelter }}</li>
+        {% endfor %}
+      </ul>
+
+      <h3>🛣️ Safe Route</h3>
+      <p>{{ path | join(" → ") }}</p>
+    </div>
+
+    <!-- 🚨 Request Van -->
+    <div class="card">
+      <button onclick="showVanTracker()">🚨 Request Rescue Van</button>
+    </div>
+
+    <!-- 🗺️ Van Tracker Section -->
+    <div id="vanSection" class="card" style="display: none;">
+      <h3>🚐 Van Arrival</h3>
+      <p id="etaText">Calculating...</p>
+      <button onclick="updateETA()">🔁 Refresh ETA</button>
+
+      <h3>🗺️ Van Tracker</h3>
+      <div id="map" style="height: 400px;"></div>
+    </div>
+
+    <!-- 🆘 SOS + Voice + Phone Input -->
+    <div class="card">
+      <button onclick="showSOSForm()">🆘 Emergency SOS</button>
+      <button onclick="startRecording()">🎙️ Record Voice Message</button>
+
+      <div id="sosForm" style="margin-top: 15px; display: none;">
+        <input type="text" id="sosPhone" placeholder="Enter your phone number" required>
+        <button onclick="submitSOS()">Send SOS</button>
+      </div>
+
+      <p id="sos-status"></p>
+      <audio id="recordedAudio" controls style="display:none;"></audio>
+    </div>
+
+    <a href="/"><button>🏠 Home</button></a>
+  </div>
+
+  <script>
+    const ngo = {{ ngo_coords }};
+    const src = {{ src_coords }};
+    const dest = {{ dest_coords }};
+    const vanTime = {{ van_time }};
+    const requestedAt = new Date("{{ van_requested_time }} UTC");
+
+    let map, marker, route;
+    const vanIcon = L.icon({
+      iconUrl: "/static/images/van.png",
+      iconSize: [60, 60],
+      iconAnchor: [30, 60]
+    });
+
+    function showVanTracker() {
+      document.getElementById("vanSection").style.display = "block";
+      setTimeout(() => {
+        if (!map) {
+          map = L.map("map").setView(ngo, 7);
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "© OpenStreetMap contributors"
+          }).addTo(map);
+
+          // ✅ Updated: NGO → Victim → Destination
+          route = L.polyline([ngo, src, dest], { color: "blue", dashArray: "8,6" }).addTo(map);
+          marker = L.marker(ngo, { icon: vanIcon }).addTo(map); // Van starts from NGO
+        }
+
+        updateETA();
+        animateVanFullRoute();  // Call the 3-step animation function
+      }, 300);
+    }
+
+    function animateVanFullRoute() {
+      let segments = [ngo, src, dest];
+      let current = 0;
+
+      function moveSegment(start, end, duration, callback) {
+        const startTime = Date.now();
+        function step() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const lat = start[0] + (end[0] - start[0]) * progress;
+          const lng = start[1] + (end[1] - start[1]) * progress;
+          marker.setLatLng([lat, lng]);
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            callback();
+          }
+        }
+        step();
+      }
+
+      function nextSegment() {
+        if (current < segments.length - 1) {
+          moveSegment(segments[current], segments[current + 1], duration / 2, nextSegment);
+          current++;
+        }
+      }
+
+      nextSegment();
+    }
+
+
+
+    const duration = vanTime * 60 * 1000;
+    const startTime = Date.now();
+
+    function updateETA() {
+      const now = new Date();
+      const diffMin = Math.floor((now - requestedAt) / 60000);
+      const minsLeft = vanTime - diffMin;
+      const text = minsLeft <= 0
+        ? "🚐 Rescue van has arrived!"
+        : `🚐 Van will arrive in <strong>${minsLeft}</strong> minute(s).`;
+      document.getElementById("etaText").innerHTML = text;
+    }
+
+    function animateVanFullRoute() {
+  let segments = [ngo, src, dest];
+  let current = 0;
+
+  function moveSegment(start, end, duration, callback) {
+    const startTime = Date.now();
+    function step() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const lat = start[0] + (end[0] - start[0]) * progress;
+      const lng = start[1] + (end[1] - start[1]) * progress;
+      marker.setLatLng([lat, lng]);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        callback();
+      }
+    }
+    step();
+  }
+
+  function nextSegment() {
+    if (current < segments.length - 1) {
+      moveSegment(segments[current], segments[current + 1], duration / 2, nextSegment);
+      current++;
+    }
+  }
+
+  nextSegment();
+}
+
+
+    // 🆘 SOS with phone input
+    function showSOSForm() {
+      document.getElementById("sosForm").style.display = "block";
+    }
+
+    function submitSOS() {
+      const phone = document.getElementById("sosPhone").value;
+      if (!phone) {
+        alert("📱 Please enter your phone number.");
+        return;
+      }
+
+      fetch("/sos-alert", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: phone,
+          area: "{{ area.title() }}"
+        })
+      })
+      .then(() => {
+        alert("🚨 SOS sent to rescue team!");
+        document.getElementById("sos-status").innerText =
+          "🆘 SOS sent at " + new Date().toLocaleTimeString();
+        document.getElementById("sosForm").style.display = "none";
+      })
+      .catch(err => {
+        alert("❌ Failed to send SOS.");
+        console.error(err);
+      });
+    }
+
+    // 🎙️ Voice recording
+    let recorder, audioChunks;
+    function startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = e => audioChunks.push(e.data);
+        recorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks);
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = document.getElementById("recordedAudio");
+          audio.src = audioUrl;
+          audio.style.display = "block";
+        };
+        audioChunks = [];
+        recorder.start();
+
+        setTimeout(() => {
+          recorder.stop();
+          alert("🎤 Voice message recorded.");
+        }, 5000);
+      }).catch(err => {
+        alert("Microphone permission denied or not supported.");
+      });
+    }
+  </script>
+</body>
+</html>

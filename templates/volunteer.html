@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Become a Volunteer</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    function toggleAmountField() {
+      const aidType = document.getElementById("aidType").value;
+      const amountField = document.getElementById("amountField");
+      if (aidType === "money") {
+        amountField.style.display = "block";
+      } else {
+        amountField.style.display = "none";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>🤝 Volunteer Registration</h1>
+    <form action="/register-volunteer" method="POST">
+      <input type="text" name="name" placeholder="👤 Full Name" required>
+      <input type="text" name="phone" placeholder="📞 Phone Number" required>
+      <input type="text" name="address" placeholder="🏠 Address (Area)" required>
+      <input type="text" name="city" placeholder="🌆 City" required>
+
+      <select name="aidType" id="aidType" onchange="toggleAmountField()" required>
+        <option disabled selected>Choose Aid Type</option>
+        <option value="money">💰 Money</option>
+        <option value="food">🥫 Food</option>
+        <option value="medical">💉 Medical</option>
+      </select>
+
+      <div id="amountField" style="display:none;">
+        <input type="number" name="amount" placeholder="💰 Amount (₹)">
+      </div>
+
+      <button type="submit">Submit Details</button>
+    </form>
+  </div>
+</body>
+</html>

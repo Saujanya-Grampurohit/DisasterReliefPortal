@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disaster Relief Portal</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5faff;
+      color: #222;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(to right, #004e7c, #0077b6);
+      color: white;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin: 0;
+      font-weight: bold;
+    }
+    .hero p {
+      font-size: 1.3rem;
+      margin-top: 10px;
+    }
+
+.hero-buttons {
+  margin-top: 30px;
+}
+
+.hero-buttons a {
+  text-decoration: none;
+}
+
+.hero-buttons .btn {
+  display: inline-block;
+  padding: 16px 36px;
+  margin: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.hero-buttons .red {
+  background-color: #e63946;
+}
+
+.hero-buttons .blue {
+  background-color: #1d3557;
+}
+
+.hero-buttons .btn:hover {
+  transform: translateY(-3px);
+  background-color: #023e8a;
+}
+
+
+    .cta-buttons {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .cta-buttons a button {
+      font-size: 1rem;
+      padding: 14px 28px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .cta-buttons a button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .cta-buttons .danger {
+      background: #e63946;
+      color: white;
+    }
+
+    .cta-buttons .safe {
+      background: #1d3557;
+      color: white;
+    }
+
+    .zigzag {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      max-width: 1000px;
+      margin: 50px auto;
+      gap: 40px;
+      padding: 0 20px;
+    }
+
+  .feature-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 80px 10%;
+  max-width: 1400px;
+  margin: auto;
+  flex-wrap: nowrap;
+}
+
+.feature-section.reverse {
+  flex-direction: row-reverse;
+}
+
+.feature-section img {
+  width: 48%;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.feature-section .text {
+  width: 45%;
+}
+
+.feature-section .text h2 {
+  font-size: 2rem;
+  color: #0077b6;
+  margin-bottom: 12px;
+}
+
+/* Slide-in Animations */
+.slide-in-left {
+  animation: slideInLeft 1s ease forwards;
+  opacity: 0;
+}
+
+.slide-in-right {
+  animation: slideInRight 1s ease forwards;
+  opacity: 0;
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.feature-image {
+  flex: 1;
+  text-align: center;
+}
+
+.feature-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+
+.text {
+  flex: 1;
+  max-width: 550px;
+  padding: 0 20px;
+}
+
+.text h2 {
+  font-size: 2.2rem;
+  color: #0077b6;
+  margin-bottom: 10px;
+}
+
+.text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+    .carousel-section {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card-slide {
+      min-width: 300px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .card-slide:hover {
+      transform: scale(1.05);
+    }
+
+    .card-slide img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      background: #003049;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .footer h3 {
+      margin-bottom: 10px;
+    }
+
+    .footer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer ul li {
+      margin-bottom: 5px;
+    }
+
+    .credits {
+      background: #001d2d;
+      color: #ccc;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+  <div class="hero-content">
+    <h1>🌍 Disaster Relief Portal</h1>
+    <p>Empowering lives. Responding to crises. Together we recover.</p>
+    <div class="hero-buttons">
+      <a href="/victim" class="btn red">🚨 I am a Victim</a>
+      <a href="/volunteer" class="btn blue">🤝 Register as Volunteer</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ZIGZAG DESKTOP-FRIENDLY SECTIONS -->
+<section class="feature-section slide-in-left">
+  <div class="feature-image">
+    <img src="/static/images/RescueTeam.jpg" alt="Rescue Team">
+  </div>
+  <div class="text">
+    <h2>Emergency Rescue Operations</h2>
+    <p>Our trained teams work hand-in-hand with NGOs to ensure victims are rescued within minutes, supported by real-time van tracking.</p>
+  </div>
+</section>
+
+<section class="feature-section slide-in-right reverse">
+  <div class="feature-image">
+    <img src="/static/images/MedicalTeam.webp" alt="Medical Team">
+  </div>
+  <div class="text">
+    <h2>Medical Aid & Relief</h2>
+    <p>Timely medical assistance through partnered hospitals and mobile clinics deployed in affected regions within 24 hours.</p>
+  </div>
+</section>
+
+<section class="feature-section slide-in-left">
+  <div class="feature-image">
+    <img src="/static/images/shelter.jpeg" alt="Shelter Support">
+  </div>
+  <div class="text">
+    <h2>Shelter & Support</h2>
+    <p>We provide safe shelters, food, and supplies to displaced families during natural disasters like floods and earthquakes.</p>
+  </div>
+</section>
+
+
+  <!-- Carousel Section -->
+  <div class="carousel-section">
+    <h2>📢 Ongoing Relief Operations</h2>
+    <div class="carousel">
+      <div class="card-slide">
+        <img src="static/images/floodreliefinNashik.jpeg" alt="Relief 1">
+        <h3>Flood Relief in Nashik</h3>
+        <p>Volunteers delivering essentials to over 1000 families.</p>
+      </div>
+      <div class="card-slide">
+        <img src="static/images/MedicalCampInPune.jpeg" alt="Relief 2">
+        <h3>Medical Camp in Pune</h3>
+        <p>Free health check-ups and mobile clinics in rural zones.</p>
+      </div>
+      <div class="card-slide">
+        <img src="static/images/ShelterSetupInNagpur.jpeg" alt="Relief 3">
+        <h3>Shelter Setup in Nagpur</h3>
+        <p>Over 20 temporary shelters set up by local NGOs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Helpline Footer -->
+  <div class="footer">
+    <h3>📞 Emergency Helpline Numbers</h3>
+    <ul>
+      <li>Disaster Management: <strong>1077</strong></li>
+      <li>Fire Brigade: <strong>101</strong></li>
+      <li>Distress Helpline: <strong>+91-9711077372</strong></li>
+      <li>NDMA Helpline: <strong>011-1078</strong></li>
+      <li>Ambulance: <strong>102</strong></li>
+      <li>NDRF Headquarters: <strong>011-24363260</strong></li>
+    </ul>
+  </div>
+
+  <!-- Credits -->
+  <div class="credits">
+    <p>Created by <strong>Saujanya Grampurohit</strong></p>
+    <p>Email: saujanya.grampurohit@cumminscollege.in | Contact: +91-8329284037</p>
+  </div>
+
+  <!-- Auto Scroll Script -->
+  <!-- Auto Scroll Script -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const carousel = document.querySelector('.carousel');
+    setInterval(() => {
+      carousel.scrollBy({ left: 320, behavior: 'smooth' });
+    }, 4000); // every 4 seconds
+  });
+</script>
+
+
+</body>
+</html>

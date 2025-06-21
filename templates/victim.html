@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🚨 Disaster Report</h1>
+    <form action="/victim-report" method="POST">
+      <input name="area" placeholder="Enter Affected Area" required>
+      <select name="type" required>
+        <option value="flood">🌊 Flood</option>
+        <option value="fire">🔥 Fire</option>
+        <option value="landslide">🏔️ Landslide</option>
+        <option value="earthquake">🌎 Earthquake</option>
+      </select>
+
+      <input name="source" placeholder="From (Source City)" required>
+      <input name="destination" placeholder="To (Destination City)" required>
+      <button type="submit">Submit Report</button>
+    </form>
+  </div>
+</body>
+</html>
